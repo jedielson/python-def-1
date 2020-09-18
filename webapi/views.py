@@ -17,3 +17,5 @@ class AuthorViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin,
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['name', 'publication_year', 'edition']
