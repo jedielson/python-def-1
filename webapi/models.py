@@ -15,8 +15,7 @@ class Book(models.Model):
     authors = models.ManyToManyField(Author)
 
     def __str__(self):
-        return "%s %d %d" % (self.name, self.edition, self.publication_year)
+        return f"{self.name} {self.edition} {self.publication_year}"
 
     class Meta:
         ordering = ['name']
-    

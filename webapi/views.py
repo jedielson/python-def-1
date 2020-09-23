@@ -1,13 +1,12 @@
-from rest_framework import viewsets, mixins
-from rest_framework.viewsets import GenericViewSet
+from rest_framework import viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 
 from webapi.models import Author, Book
-from webapi.serializers import AuthorSerializer, BookSerializer
+from webapi.serializers import AuthorSerializer, BookWriteSerializer
+from webapi.serializers import BooksReadSerializer
 
 
-class AuthorViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin,
-                    GenericViewSet):
+class AuthorViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
     filter_backends = [DjangoFilterBackend]
@@ -16,6 +15,10 @@ class AuthorViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin,
 
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
-    serializer_class = BookSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['name', 'publication_year', 'edition']
+
+    def get_serializer_class(self):
+        if self.action in ('list', 'retrieve'):
+            return BooksReadSerializer
+        return BookWriteSerializer

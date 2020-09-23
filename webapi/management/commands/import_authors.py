@@ -48,8 +48,4 @@ class Command(BaseCommand):
         if name == 'name':
             return
 
-        existing_author = Author.objects.filter(name=name)
-        if existing_author:
-            return
-
-        Author.objects.create(name=name)
+        Author.objects.get_or_create(name=name)
